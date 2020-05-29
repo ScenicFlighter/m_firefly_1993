@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+// Extract Component
+.app_nav {
+    @apply flex items-center justify-between flex-wrap bg-gray-800 p-3 fixed w-full z-10 top-0
+}
+
+.nav_title {
+    @apply flex items-center flex-shrink-0 text-white mr-6
+}
+
+.nav_title {
+    font-size: 25px;
+    a {
+        @apply text-white no-underline
+    }
+    span {
+        @apply text-white no-underline
+    }
+}
+
+.nav_link {
+    cursor: pointer;
+    @apply inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white
+}
+
+.image_select {
+    @apply w-64 flex flex-col items-center px-4 py-6 bg-white rounded-lg shadow-lg tracking-wide uppercase border cursor-pointer
+}
+// text-blue border-blue
+.bd_alert {
+    @apply text-center py-4
+}
+
+.bd_alert > div {
+    @apply p-2 items-center leading-none
+}
+
+.bd_alert > span {
+    @apply font-semibold mr-2 text-left p-3 flex-auto
+}
+
+.btn-primary {
+    @apply font-bold py-2 p-5 rounded bg-blue-500 text-white
+}

@@ -1,0 +1,23 @@
+{
+  "name": "m_firefly",
+  "version": "1.0.0",
+  "description": "iwk",
+  "private": true,
+  "main": "index.js",
+  "repository": "https://github.com/ScenicFlighter/m_firefly.git",
+  "author": "ScenicFlighter",
+  "license": "MIT",
+  "scripts": {
+    "start": "parcel ./static/index.html --https --public-url / --host firefly.as-rule.local --port 1993 --log-level 3"
+  },
+  "devDependencies": {
+    "autoprefixer": "^9.8.0",
+    "elm": "^0.19.1-3",
+    "elm-hot": "^1.1.4",
+    "node-elm-compiler": "^5.0.4",
+    "parcel-bundler": "^1.11.0",
+    "postcss-modules": "^2.0.0",
+    "sass": "^1.26.7",
+    "tailwindcss": "^1.4.6"
+  }
+}
