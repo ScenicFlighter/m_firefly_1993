@@ -39,6 +39,8 @@ type Msg
     = ImageRequested
     | ImageSelected File
     | ImageLoaded (Result LoadErr String)
+    | HandleAnalyze
+
 type LoadErr
     = ErrToUrlFailed
     | ErrInvalidFile
@@ -46,6 +48,10 @@ type LoadErr
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+        HandleAnalyze -> 
+            Debug.log "Analyze"
+            ( model
+            , Cmd.none)
         ImageRequested ->
             ( model
             , Select.file expectedTypes ImageSelected
@@ -81,7 +87,6 @@ update msg model =
 expectedTypes : List String
 expectedTypes =
     [ "image/png", "image/jpg", "image/jpeg", "image/gif" ]
-
 
 guardType : File -> Task.Task LoadErr File
 guardType file =
@@ -151,7 +156,7 @@ view model =
           div [class "bd_alert px-4"]
           [
             div [class "rounded-full flex inline-flex"] [
-              button [class "btn-primary w-full"] [text "Analyze!"]
+              button [class "btn-primary w-full", onClick HandleAnalyze] [text "Analyze!"]
             ]
           ]
         ]
