@@ -1,0 +1,40 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  firefly
+  
+  Sample SAM Template for firefly
+
+Globals:
+  Function:
+    Timeout: 120
+
+Resources:
+  RekognitionFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: rekognition/
+      Handler: rekognition
+      Runtime: go1.x
+      Tracing: Active
+      Events:
+        CatchAll:
+          Type: Api
+          Properties:
+            Path: /analyze
+            Method: POST
+      Environment:
+        Variables:
+          TARGET_IMAGE_NAME: TARGET_IMAGE_NAME
+          TARGET_IMAGE_KEY: TARGET_IMAGE_KEY
+
+Outputs:
+  RekognitionAPI:
+    Description: "API Gateway endpoint URL for Prod environment for First Function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/analyze/"
+  RekognitionFunction:
+    Description: "First Lambda Function ARN"
+    Value: !GetAtt RekognitionFunction.Arn
+  RekognitionFunctionIamRole:
+    Description: "Implicit IAM Role created for Hello World function"
+    Value: !GetAtt RekognitionFunctionRole.Arn

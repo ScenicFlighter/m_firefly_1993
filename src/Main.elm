@@ -49,7 +49,9 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         HandleAnalyze -> 
-            Debug.log "Analyze"
+         let 
+          _ = getAnalyzeResult "model.image"
+         in
             ( model
             , Cmd.none)
         ImageRequested ->
@@ -95,6 +97,9 @@ guardType file =
 
     else
         Task.fail ErrInvalidFile
+
+getAnalyzeResult : String -> String
+getAnalyzeResult image = Debug.log "Analyze" image
 
 -- VIEW
 view : Model -> Html Msg
@@ -152,14 +157,17 @@ view model =
           Just content -> img[class "object-contain sm:object-cover md:object-fill lg:object-none xl:object-scale-down", src content][]
       ],
       div [class "container mx-auto"]
-        [
-          div [class "bd_alert px-4"]
-          [
-            div [class "rounded-full flex inline-flex"] [
-              button [class "btn-primary w-full", onClick HandleAnalyze] [text "Analyze!"]
-            ]
-          ]
-        ]
+      [
+        case model.image of
+          Nothing -> div [] []
+          Just content ->
+              div [class "bd_alert px-4"]
+                [
+                  div [class "rounded-full flex inline-flex"] [
+                    button [class "btn-primary w-full", onClick HandleAnalyze] [text "Analyze!"]
+                  ]
+                ]
+      ]
     ]
 
 

@@ -10,3 +10,6 @@ dist
 elm-stuff
 # elm-repl generated files
 repl-temp-*
+api/firefly/rekognition/rekognition
+api/firefly/env.json
+api/firefly/packaged.yaml
