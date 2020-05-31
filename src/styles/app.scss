@@ -45,3 +45,12 @@
 .btn-primary {
     @apply font-bold py-2 p-5 rounded bg-blue-500 text-white
 }
+
+.btn-disable {
+    @apply font-bold py-2 p-5 rounded bg-gray-500 text-white;
+    cursor: not-allowed
+}
+
+.message {
+    @apply bg-blue-100 border-t border-b border-blue-500 text-blue-700 px-4 py-3
+}

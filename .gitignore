@@ -13,3 +13,5 @@ repl-temp-*
 api/firefly/rekognition/rekognition
 api/firefly/env.json
 api/firefly/packaged.yaml
+.env
+.DS_Store
