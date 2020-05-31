@@ -163,7 +163,7 @@ view model =
             ul [class "list-reset lg:flex justify-end flex-1 items-center"] [
               li [class "mr-3"] [a[
                   class "nav_link hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0",
-                  href "https://github.com/ScenicFlighter/m_firefly.git",
+                  href "https://github.com/ScenicFlighter/m_firefly_1993",
                   target "_blank"
                 ] 
                 [text "Github"]]
