@@ -1,18 +1,24 @@
 package main
 
 import (
+	"bytes"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
+	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/rekognition"
+	"github.com/vincent-petithory/dataurl"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/aws/aws-sdk-go/aws/session"
+
+	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 )
 
 // APIRequest is post Request struct
@@ -25,8 +31,15 @@ func generateRekogClient() *rekognition.Rekognition {
 	return rekognition.New(sess, aws.NewConfig().WithRegion("ap-northeast-1"))
 }
 
+func generateS3Client() *s3manager.Uploader {
+	sess := session.Must(session.NewSession(&aws.Config{
+		Region: aws.String("ap-northeast-1"),
+	}))
+	return s3manager.NewUploader(sess)
+}
+
 func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	bytes := []byte(request.Body)
+	requestByte := []byte(request.Body)
 	var r APIRequest
 	defaultHeader := map[string]string{
 		"Access-Control-Allow-Origin":  "*",
@@ -34,7 +47,7 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		"Content-Type":                 "application/json",
 	}
 
-	_ = json.Unmarshal(bytes, &r)
+	_ = json.Unmarshal(requestByte, &r)
 
 	bucket := os.Getenv("TARGET_IMAGE_NAME")
 	key := os.Getenv("TARGET_IMAGE_KEY")
@@ -69,6 +82,27 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 	if len(result.FaceMatches) != 0 && int(*result.FaceMatches[0].Similarity) >= 85 {
 		response = "match"
+
+		t := time.Now()
+		extens, _ := dataurl.DecodeString(r.Image)
+
+		fileExtension := strings.Split(extens.ContentType(), "/")
+
+		filename := "kasumi_match_" + strconv.FormatInt(t.Unix(), 10) + "." + fileExtension[1]
+
+		fmt.Println(filename)
+
+		s3Manager := generateS3Client()
+		_, err := s3Manager.Upload(&s3manager.UploadInput{
+			Bucket: aws.String(bucket),
+			Key:    aws.String("/match/" + filename),
+			Body:   bytes.NewReader(byteIMAGE),
+		})
+
+		if err != nil {
+			fmt.Println(err)
+			panic(500)
+		}
 	}
 
 	return events.APIGatewayProxyResponse{
